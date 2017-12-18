@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--设置圆角-->
+    <corners android:radius="10dp"/>
+    <!--设置线条-->
+    <stroke android:width="1dp" android:color="@color/colorPrimaryDark"/>
+    <!--内扩展-->
+    <padding android:top="@dimen/views_normal_distance"
+        android:bottom="@dimen/views_normal_distance"
+        android:left="@dimen/views_normal_distance"
+        android:right="@dimen/views_normal_distance"/>
+
+</shape>

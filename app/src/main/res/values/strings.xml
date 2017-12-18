@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">BFChineseCharacterStudy</string>
+    <string name="app_showName">汉字学习</string>
+
+    <!-- Add Book Fragment -->
+    <string name="addbook_edit_hint">请输入条形码</string>
+    <string name="addbook_text_tips">Please input the ISBN of a book, or use the parents app to scan that.</string>
+    <string name="addbook_btn_msg">确定</string>
+
+</resources>
