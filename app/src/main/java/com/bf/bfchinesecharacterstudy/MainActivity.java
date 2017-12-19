@@ -6,6 +6,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import Common.BFAppManager;
 import Fragment.BFBookAddFragment;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -38,6 +40,10 @@ public class MainActivity extends Activity {
 
         showLoadingView();
         changeToBookAddFeature();
+
+        /* Test */
+//        BFAppManager appManager = new BFAppManager();
+//        appManager.checkAppPkg(this);
     }
 
 //    /* Private */
@@ -67,6 +73,7 @@ public class MainActivity extends Activity {
                     String jsonStr = response.body().string();
                     boolean isOK = false;
                     try {
+                        // 判断返回数据是否非空有效
                         JSONObject json = new JSONObject(jsonStr);
                         isOK = (json.getInt("ok") == 1);
                         Log.i(BFConstant.BFTAG, "response:" + json);
@@ -80,11 +87,49 @@ public class MainActivity extends Activity {
                         mainHandler.sendEmptyMessage(NO_FOUND_LAST);
 
                     } else {
-                        // 更新当前内容
+                        // 有效数据处理
+                        long delayMillis = 0;
+                        Message msg = mainHandler.obtainMessage(GET_RIGHT_JSON, jsonStr);
+                        mainHandler.sendMessageDelayed(msg, delayMillis);
                     }
                 }
             });
         }
+    }
+
+    private boolean handleConcreteData(String jsonStr) {
+        // 非空 + 语文/英语
+        if (!TextUtils.isEmpty(jsonStr)){
+            int subjectKind = kindOfSubject(jsonStr);
+            switch (subjectKind) {
+                case 1:// 语文
+                    // 跳转语文程序Activity
+
+                    break;
+                case 2:
+                    Log.d(BFConstant.BFTAG, "没有英语课程的相关处理程序");
+                default:
+                    Log.d(BFConstant.BFTAG, "没有相关索引课程的处理方法 -> subject kind:"
+                            + subjectKind);
+                    break;
+            }
+        }
+        return false;
+    }
+    /*
+    1:语文
+    2：
+    * */
+    private int kindOfSubject(String jsonStr) {
+        try {
+            JSONObject json = new JSONObject(jsonStr);
+            JSONObject data = json.getJSONObject("data");
+            return data.getInt("type");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
     }
 
     /* Loading View */
@@ -130,6 +175,8 @@ public class MainActivity extends Activity {
 
     /* Handler */
     private final int NO_FOUND_LAST = 2;
+    private final int GET_RIGHT_JSON = 3;
+
     Handler mainHandler = new Handler() {
 
         @Override
@@ -140,6 +187,15 @@ public class MainActivity extends Activity {
                 case NO_FOUND_LAST:
                     Toast.makeText(getApplication(), "查无结果", Toast.LENGTH_LONG).show();
                     showBookAddFragment();
+                    break;
+                case GET_RIGHT_JSON:
+//                    Log.d(BFConstant.BFTAG, "handle msg:\n"+msg);
+                    String jsonStr = (String) msg.obj;
+                    if (handleConcreteData(jsonStr)) {
+                        finish();
+                    } else {
+                        // 提示内容显示失败
+                    }
                     break;
                 default:
                     break;

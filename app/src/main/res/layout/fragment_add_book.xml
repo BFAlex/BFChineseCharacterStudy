@@ -11,7 +11,7 @@
         android:layout_marginRight="30dp"
         android:gravity="center"
         android:hint="@string/addbook_edit_hint"
-        android:text="9787110079416"
+        android:text="9787532840519"
         android:background="@drawable/bf_edit_corner"/>
     <!--android:text="9787565208793"-->
 
