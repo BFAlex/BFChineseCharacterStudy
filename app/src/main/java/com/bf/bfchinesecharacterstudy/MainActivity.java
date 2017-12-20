@@ -182,7 +182,6 @@ public class MainActivity extends Activity {
         @Override
         public void handleMessage(Message msg) {
 
-            BFDatabaseManager.newInstance(getApplicationContext()).testtDatabase(getApplicationContext());
             switch (msg.what) {
                 case NO_FOUND_LAST:
                     Toast.makeText(getApplication(), "查无结果", Toast.LENGTH_LONG).show();

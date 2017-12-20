@@ -2,8 +2,10 @@ package Database;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.bf.bfchinesecharacterstudy.BFConstant;
+import com.bf.bfchinesecharacterstudy.db.BFBookModelDao;
 import com.bf.bfchinesecharacterstudy.db.DaoMaster;
 import com.bf.bfchinesecharacterstudy.db.DaoSession;
 import com.bf.bfchinesecharacterstudy.db.TestModelDao;
@@ -53,39 +55,63 @@ public class BFDatabaseManager {
 
     /* 课本Table */
     public boolean addBookEntity(BFBookModel bookModel) {
+        if (daoSession == null) {
+            daoSession = daoMaster.newSession();
+        }
 
+        if (bookModel != null) {
+            BFBookModelDao bookModelDao = daoSession.getBFBookModelDao();
+            Long result = daoSession.insert(bookModel);
+            Log.d(BFConstant.BFTAG, "添加结果码:" + result);
+            if (result > 0) {
+                return true;
+            }
+        }
         return false;
     }
     public boolean deleteBookEntity(BFBookModel bookModel) {
+        if (daoSession == null) {
+            daoSession = daoMaster.newSession();
+        }
+
+        if (bookModel != null) {
+            BFBookModelDao bookModelDao = daoSession.getBFBookModelDao();
+            bookModelDao.delete(bookModel);
+            return  true;
+        }
 
         return false;
     }
-
-
-    /*--------------------------------------------------*/
-    public void testtDatabase(Context context) {
-        // 创建并获取数据库
-//        DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper(context, "BFChineseCharacter.db", null);
-//        DaoMaster daoMaster = new DaoMaster(devOpenHelper.getWritableDb());
-//        DaoSession daoSession = daoMaster.newSession();
-        // 获取目标Table的访问对象
-        TestModelDao testModelDao = daoSession.getTestModelDao();
-        // 给实体插入数据
-        TestModel testModel = new TestModel(null, "test1");
-        TestModel testModel2 = new TestModel(null, "test2");
-        TestModel testModel3 = new TestModel(null, "test3");
-        testModelDao.insert(testModel);
-        testModelDao.insert(testModel2);
-        testModelDao.insert(testModel3);
-        // 查询数据
-        List<TestModel> testModelList = (List<TestModel>)testModelDao.queryBuilder()
-                .where(TestModelDao.Properties.Id.le(10)).build().list();
-        for (TestModel model : testModelList) {
-            String modelMsg = String.format("查询结果:【id:%d, name:%s】", model.getId(), model.getName());
-            Log.d(BFConstant.BFTAG, modelMsg);
+    public boolean updateBookEntity(BFBookModel bookModel) {
+        if (daoSession == null) {
+            daoSession = daoMaster.newSession();
         }
-        // 删除数据
-        TestModel lastModel = testModelList.get(testModelList.size()-2);
-        testModelDao.delete(lastModel);
+
+        if (bookModel != null) {
+            BFBookModelDao bookModelDao = daoSession.getBFBookModelDao();
+            bookModelDao.update(bookModel);
+            return  true;
+        }
+
+        return false;
     }
+    public List<BFBookModel> queryBookEntryByBarcode(String barcode) {
+
+        List<BFBookModel> bookModels = null;
+
+        if (daoSession == null) {
+            daoSession = daoMaster.newSession();
+        }
+
+        if (barcode != null && barcode.length() > 0) {
+            BFBookModelDao bookModelDao = daoSession.getBFBookModelDao();
+            bookModels = bookModelDao.queryBuilder()
+                    .where(BFBookModelDao.Properties.Barcode.like(barcode)).build().list();
+
+            return  bookModels;
+        }
+
+        return bookModels;
+    }
+
 }
