@@ -3,28 +3,32 @@ package Database.Model;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.JoinProperty;
+import org.greenrobot.greendao.annotation.ToMany;
+import org.greenrobot.greendao.annotation.Unique;
 
 /**
  * Created by 1 on 2017/12/20.
  */
 
 @Entity
-public class BFBookModel {
+public class BFDBBookModel {
     @Id
     private Long id;
     private int type;
     private String name;
-    private String barcode;
+    /* 如何实现1:N的外联关系 */
+    @Unique private String barcode;
 
-    @Generated(hash = 1496587510)
-    public BFBookModel(Long id, int type, String name, String barcode) {
+    @Generated(hash = 653547807)
+    public BFDBBookModel(Long id, int type, String name, String barcode) {
         this.id = id;
         this.type = type;
         this.name = name;
         this.barcode = barcode;
     }
-    @Generated(hash = 1504554016)
-    public BFBookModel() {
+    @Generated(hash = 1656057749)
+    public BFDBBookModel() {
     }
     public Long getId() {
         return this.id;
@@ -50,5 +54,4 @@ public class BFBookModel {
     public void setBarcode(String barcode) {
         this.barcode = barcode;
     }
-
 }

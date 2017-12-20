@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bf.bfchinesecharacterstudy.Model.BFBookModel;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -104,7 +106,7 @@ public class MainActivity extends Activity {
             switch (subjectKind) {
                 case 1:// 语文
                     // 跳转语文程序Activity
-
+                    BFBookModel bookModel = BFBookModel.bookModel(jsonStr);
                     break;
                 case 2:
                     Log.d(BFConstant.BFTAG, "没有英语课程的相关处理程序");

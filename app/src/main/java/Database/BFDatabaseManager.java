@@ -1,26 +1,12 @@
 package Database;
 
 import android.content.Context;
-import android.util.Log;
-import android.widget.Toast;
 
-import com.bf.bfchinesecharacterstudy.BFConstant;
-import com.bf.bfchinesecharacterstudy.db.BFBookModelDao;
 import com.bf.bfchinesecharacterstudy.db.DaoMaster;
 import com.bf.bfchinesecharacterstudy.db.DaoSession;
-import com.bf.bfchinesecharacterstudy.db.TestModelDao;
-
-import org.greenrobot.greendao.AbstractDaoMaster;
-import org.greenrobot.greendao.database.Database;
-import org.greenrobot.greendao.database.DatabaseOpenHelper;
-
-import java.util.List;
-
-import Database.Model.BFBookModel;
-import Database.Model.TestModel;
 
 /**
- * Created by 1 on 2017/12/19.
+ * Created by BFAlex on 2017/12/19.
  */
 
 public class BFDatabaseManager {
@@ -54,64 +40,92 @@ public class BFDatabaseManager {
     }
 
     /* 课本Table */
-    public boolean addBookEntity(BFBookModel bookModel) {
-        if (daoSession == null) {
-            daoSession = daoMaster.newSession();
-        }
-
-        if (bookModel != null) {
-            BFBookModelDao bookModelDao = daoSession.getBFBookModelDao();
-            Long result = daoSession.insert(bookModel);
-            Log.d(BFConstant.BFTAG, "添加结果码:" + result);
-            if (result > 0) {
-                return true;
-            }
-        }
-        return false;
-    }
-    public boolean deleteBookEntity(BFBookModel bookModel) {
-        if (daoSession == null) {
-            daoSession = daoMaster.newSession();
-        }
-
-        if (bookModel != null) {
-            BFBookModelDao bookModelDao = daoSession.getBFBookModelDao();
-            bookModelDao.delete(bookModel);
-            return  true;
-        }
-
-        return false;
-    }
-    public boolean updateBookEntity(BFBookModel bookModel) {
-        if (daoSession == null) {
-            daoSession = daoMaster.newSession();
-        }
-
-        if (bookModel != null) {
-            BFBookModelDao bookModelDao = daoSession.getBFBookModelDao();
-            bookModelDao.update(bookModel);
-            return  true;
-        }
-
-        return false;
-    }
-    public List<BFBookModel> queryBookEntryByBarcode(String barcode) {
-
-        List<BFBookModel> bookModels = null;
-
-        if (daoSession == null) {
-            daoSession = daoMaster.newSession();
-        }
-
-        if (barcode != null && barcode.length() > 0) {
-            BFBookModelDao bookModelDao = daoSession.getBFBookModelDao();
-            bookModels = bookModelDao.queryBuilder()
-                    .where(BFBookModelDao.Properties.Barcode.like(barcode)).build().list();
-
-            return  bookModels;
-        }
-
-        return bookModels;
-    }
+//    public boolean insertBookEntity(BFDBBookModel bookModel) {
+//        if (daoSession == null) {
+//            daoSession = daoMaster.newSession();
+//        }
+//
+//        if (bookModel != null) {
+//            BFBookModelDao bookModelDao = daoSession.getBFBookModelDao();
+//            Long result = daoSession.insert(bookModel);
+//            Log.d(BFConstant.BFTAG, "添加结果码:" + result);
+//            if (result > 0) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+//    public boolean deleteBookEntity(BFDBBookModel bookModel) {
+//        if (daoSession == null) {
+//            daoSession = daoMaster.newSession();
+//        }
+//
+//        if (bookModel != null) {
+//            BFBookModelDao bookModelDao = daoSession.getBFBookModelDao();
+//            bookModelDao.delete(bookModel);
+//            return  true;
+//        }
+//
+//        return false;
+//    }
+//    public boolean updateBookEntity(BFDBBookModel bookModel) {
+//        if (daoSession == null) {
+//            daoSession = daoMaster.newSession();
+//        }
+//
+//        if (bookModel != null) {
+//            BFBookModelDao bookModelDao = daoSession.getBFBookModelDao();
+//            bookModelDao.update(bookModel);
+//            return  true;
+//        }
+//
+//        return false;
+//    }
+//    public List<BFDBBookModel> queryBookEntityByBarcode(String barcode) {
+//
+//        List<BFDBBookModel> bookModels = null;
+//
+//        if (daoSession == null) {
+//            daoSession = daoMaster.newSession();
+//        }
+//
+//        if (barcode != null && barcode.length() > 0) {
+//            BFBookModelDao bookModelDao = daoSession.getBFBookModelDao();
+//            bookModels = bookModelDao.queryBuilder()
+//                    .where(BFBookModelDao.Properties.Barcode.like(barcode)).build().list();
+//
+//            return  bookModels;
+//        }
+//
+//        return bookModels;
+//    }
+//
+//    /* 文章Table */
+//    public void insertLessonEntity(BFDBLessonModel lessonModel) {
+//        if (lessonModel == null) { return; }
+//        BFLessonModelDao lessonModelDao = daoSession.getBFLessonModelDao();
+//        lessonModelDao.insert(lessonModel);
+//    }
+//    public void deleteLessonEntity(BFDBLessonModel lessonModel) {
+//        if (lessonModel == null) { return; }
+//        BFLessonModelDao lessonModelDao = daoSession.getBFLessonModelDao();
+//        lessonModelDao.delete(lessonModel);
+//    }
+//    public void updateLessonEntity(BFDBLessonModel lessonModel) {
+//        if (lessonModel == null) { return; }
+//        BFLessonModelDao lessonModelDao = daoSession.getBFLessonModelDao();
+//        lessonModelDao.update(lessonModel);
+//    }
+//    public List<BFDBLessonModel> queryLessonEntityByBarcode(String barcode) {
+//
+//        if (barcode == null || barcode.length() <= 0) { return null; }
+//
+//        List<BFDBLessonModel> lessonModels = null;
+//        BFLessonModelDao lessonModelDao = daoSession.getBFLessonModelDao();
+//        WhereCondition whereCondition = BFLessonModelDao.Properties.Barcode.like(barcode);
+//        lessonModels = lessonModelDao.queryBuilder().where(whereCondition).build().list();
+//
+//        return lessonModels;
+//    }
 
 }
