@@ -1,10 +1,9 @@
-package third_party;
+package Internal;
 
 import android.util.Log;
 
 import com.bf.bfchinesecharacterstudy.BFConstant;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Map;
@@ -13,7 +12,6 @@ import Common.BFMd5Utils;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 
 /**
  * Created by 1 on 2017/12/14.

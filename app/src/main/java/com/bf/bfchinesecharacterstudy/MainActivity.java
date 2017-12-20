@@ -19,13 +19,12 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import Common.BFAppManager;
+import Database.BFDatabaseManager;
 import Fragment.BFBookAddFragment;
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.OkHttpClient;
 import okhttp3.Response;
-import third_party.BFHttpManager;
+import Internal.BFHttpManager;
 
 
 public class MainActivity extends Activity {
@@ -76,7 +75,7 @@ public class MainActivity extends Activity {
                         // 判断返回数据是否非空有效
                         JSONObject json = new JSONObject(jsonStr);
                         isOK = (json.getInt("ok") == 1);
-                        Log.i(BFConstant.BFTAG, "response:" + json);
+//                        Log.i(BFConstant.BFTAG, "response:" + json);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -91,6 +90,7 @@ public class MainActivity extends Activity {
                         long delayMillis = 0;
                         Message msg = mainHandler.obtainMessage(GET_RIGHT_JSON, jsonStr);
                         mainHandler.sendMessageDelayed(msg, delayMillis);
+                        Log.d(BFConstant.BFTAG, "开始处理有效数据...");
                     }
                 }
             });
@@ -181,8 +181,8 @@ public class MainActivity extends Activity {
 
         @Override
         public void handleMessage(Message msg) {
-//            super.handleMessage(msg);
-            Log.d(BFConstant.BFTAG, "msg:"+msg.toString());
+
+            BFDatabaseManager.newInstance(getApplicationContext()).testtDatabase(getApplicationContext());
             switch (msg.what) {
                 case NO_FOUND_LAST:
                     Toast.makeText(getApplication(), "查无结果", Toast.LENGTH_LONG).show();
