@@ -19,7 +19,7 @@ android {
     }
 
     greendao {
-        schemaVersion 2
+        schemaVersion 3
         daoPackage 'com.bf.bfchinesecharacterstudy.db'
         targetGenDir 'src/main/java'
     }

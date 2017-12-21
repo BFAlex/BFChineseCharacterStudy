@@ -3,9 +3,6 @@ package Database.Model;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
-import org.greenrobot.greendao.annotation.JoinProperty;
-import org.greenrobot.greendao.annotation.ToMany;
-import org.greenrobot.greendao.annotation.Unique;
 
 /**
  * Created by 1 on 2017/12/20.
@@ -18,7 +15,18 @@ public class BFDBBookModel {
     private int type;
     private String name;
     /* 如何实现1:N的外联关系 */
-    @Unique private String barcode;
+    private String barcode;
+
+//    public static BFDBBookModel newInstance(BFBookModel bookModel) {
+//        BFDBBookModel dbBookModel = new BFDBBookModel();
+//        if (dbBookModel != null) {
+//            dbBookModel.type = bookModel.bookSubject;
+//            dbBookModel.name = bookModel.bookName;
+//            dbBookModel.barcode = bookModel.bookBarcode;
+//        }
+//
+//        return dbBookModel;
+//    }
 
     @Generated(hash = 653547807)
     public BFDBBookModel(Long id, int type, String name, String barcode) {

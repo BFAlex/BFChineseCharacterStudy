@@ -27,7 +27,7 @@ public class BFLessonModel {
         BFLessonModel lessonModel = new BFLessonModel();
 
         if (lessonModel != null) {
-            Log.d(BFConstant.BFTAG, "解析Lesson Model:" + json);
+//            Log.d(BFConstant.BFTAG, "准备解析的Lesson Model:" + json);
             try {
                 lessonModel.id = json.getString("id");
                 lessonModel.name = json.getString("name");
@@ -38,8 +38,8 @@ public class BFLessonModel {
                 return null;
             }
         }
-        String descStr = String.format("[id:%s, name:%s, dataStr:%s]", lessonModel.id, lessonModel.name, lessonModel.dataStr);
-        Log.d(BFConstant.BFTAG, "解析的Lesson: " + descStr + "\n");
+//        String descStr = String.format("[id:%s, name:%s, dataStr:%s]", lessonModel.id, lessonModel.name, lessonModel.dataStr);
+//        Log.d(BFConstant.BFTAG, "解析结果 -> Lesson: " + descStr + "\n");
         return lessonModel;
     }
 
@@ -64,4 +64,5 @@ public class BFLessonModel {
 
         return dataStr;
     }
+
 }

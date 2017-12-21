@@ -107,6 +107,8 @@ public class MainActivity extends Activity {
                 case 1:// 语文
                     // 跳转语文程序Activity
                     BFBookModel bookModel = BFBookModel.bookModel(jsonStr);
+                    // 把Model转成DBModel保存到Database中
+                    BFDatabaseManager.newInstance(getApplicationContext()).localSaveBookModel(bookModel);
                     break;
                 case 2:
                     Log.d(BFConstant.BFTAG, "没有英语课程的相关处理程序");

@@ -33,7 +33,7 @@ public class BFBookModel {
                 bookModel.bookSubject = bookJson.getInt("subject");
                 bookModel.bookBarcode = bookJson.getString("barCode");
                 JSONArray jsonArr = bookJson.getJSONArray("chinese");
-                Log.d(BFConstant.BFTAG, "key:chinese, value:\n" + jsonArr);
+//                Log.d(BFConstant.BFTAG, "key:chinese, value:\n" + jsonArr);
                 bookModel.lessonModels = new BFLessonModel[jsonArr.length()];
                 for (int i = 0; i < jsonArr.length(); i++) {
                     JSONObject lessonJson = jsonArr.getJSONObject(i);
@@ -42,7 +42,7 @@ public class BFBookModel {
                         bookModel.lessonModels[i] = lessonModel;
                     }
                 }
-                Log.d(BFConstant.BFTAG, "Book Model数据初始化结果:\n" + bookModel);
+                Log.d(BFConstant.BFTAG, "Book Model数据初始化结果:\n" + bookModel.modelDescribe());
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -66,5 +66,19 @@ public class BFBookModel {
         }
 
         return BFBookModel.bookModel(json);
+    }
+
+    /* Private */
+    private String modelDescribe() {
+        String lessonStr = "...";
+//        for (int i = 0; i < this.lessonModels.length; i++) {
+//            BFLessonModel lessonModel = lessonModels[i];
+//            lessonStr += String.format("lessons(id:%s, name:%s, lesson:%s)",
+//                    lessonModel.id, lessonModel.name, lessonModel.dataStr);
+//        }
+        String descStr = String.format("【BFBookModel object】: [bookname:%s, bookSubject:%d, bookBarcode:%s, bookLessons:%s]",
+                this.bookName, this.bookSubject, bookBarcode, lessonStr);
+
+        return descStr;
     }
 }
