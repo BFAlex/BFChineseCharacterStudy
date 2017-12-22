@@ -11,9 +11,10 @@ import org.greenrobot.greendao.annotation.ToMany;
 
 @Entity
 public class BFDBLessonModel {
-    @Id
+//    @Id
     private Long id;
     private String bookBarcode;
+    @Id
     private String lessonID;
     private String lessonName;
     private String lessonWords;

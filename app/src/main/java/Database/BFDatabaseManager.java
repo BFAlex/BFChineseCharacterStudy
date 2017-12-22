@@ -53,6 +53,15 @@ public class BFDatabaseManager {
         daoMaster = new DaoMaster(devOpenHelper.getWritableDb());
         daoSession = daoMaster.newSession();
     }
+    private boolean isIdExists(String lessonId, List<BFDBLessonModel> lessonModels) {
+        for (BFDBLessonModel lessonModel : lessonModels) {
+            if (lessonId.equals(lessonModel.getLessonID())) {
+                lessonModels.remove(lessonModel);
+                return true;
+            }
+        }
+        return false;
+    }
 
     /* 课本Table */
     public boolean insertBookEntity(BFDBBookModel bookModel) {
@@ -97,6 +106,7 @@ public class BFDatabaseManager {
 
         if (bookModel != null) {
             BFDBBookModelDao bookModelDao = daoSession.getBFDBBookModelDao();
+            bookModel.setId((long) 1);
             bookModelDao.update(bookModel);
             return  true;
         }
@@ -150,15 +160,24 @@ public class BFDatabaseManager {
         return lessonModels;
     }
 
-    /* Model的存储 */
+    /* 常用接口调用 */
     public void localSaveBookModel(BFBookModel bookModel) {
+        if (bookModel == null) {return;}
+
         BFModelUtils modelUtils = BFModelUtils.newInstance();
-        boolean result = insertBookEntity(modelUtils.bookModelTurnsIntoDBBookModel(bookModel));
-        if (result) {
-            for (BFLessonModel lessonModel : bookModel.lessonModels) {
-                insertLessonEntity(modelUtils.lessonModelTurnsIntoDBLessonModel(lessonModel, bookModel.bookBarcode));
-            }
+        // 查询数据库相关key的实体
+        List<BFDBBookModel> dbBookModels = queryBookEntityByBarcode(bookModel.bookBarcode);
+        if (dbBookModels == null || dbBookModels.size() <= 0) {
+            // 数据库中找不到相关数据
+            Log.d(BFConstant.BFTAG, "数据库还没有该条形码的课本记录哦【"+bookModel.bookBarcode+"】");
+            insertBookEntity(modelUtils.bookModelTurnsIntoDBBookModel(bookModel));
+        } else {
+            // 更新旧数据
+            Log.d(BFConstant.BFTAG, "数据库已经有该条形码的课本记录了【"+bookModel.bookBarcode+"】");
+            updateBookEntity(modelUtils.bookModelTurnsIntoDBBookModel(bookModel));
         }
+        // 更新bookBarcode对应的课本内容
+        localSaveLessonModels(bookModel.lessonModels, bookModel.bookBarcode);
     }
     public BFBookModel localGetBookModel(String bookBarcode) {
         List<BFDBBookModel> dbBookModels = queryBookEntityByBarcode(bookBarcode);
@@ -167,8 +186,21 @@ public class BFDatabaseManager {
         }
         return null;
     }
-    public void localSaveLessonModel(BFLessonModel lessonModel, String bookBarcode) {
-        insertLessonEntity(BFModelUtils.newInstance().lessonModelTurnsIntoDBLessonModel(lessonModel, bookBarcode));
+    public void localSaveLessonModels(BFLessonModel[] lessonModelArr, String bookBarcode) {
+
+        List<BFDBLessonModel> dbLessonModels = queryLessonEntityByBarcode(bookBarcode);
+        for (BFLessonModel lessonModel : lessonModelArr) {
+            Log.d(BFConstant.BFTAG, "当前LessonModels的成员数量:"+dbLessonModels.size());
+            if (isIdExists(lessonModel.id, dbLessonModels)) {
+                String descStr = String.format("数据库已经有条形码【%s】中id【%s】的课文了", bookBarcode, lessonModel.id);
+                Log.d(BFConstant.BFTAG, descStr);
+                updateLessonEntity(BFModelUtils.newInstance().lessonModelTurnsIntoDBLessonModel(lessonModel, bookBarcode));
+            } else {
+                String descStr = String.format("数据库还没有条形码【%s】中id【%s】的课文哦", bookBarcode, lessonModel.id);
+                Log.d(BFConstant.BFTAG, descStr);
+                insertLessonEntity(BFModelUtils.newInstance().lessonModelTurnsIntoDBLessonModel(lessonModel, bookBarcode));
+            }
+        }
     }
     public List<BFLessonModel> localGetLessonModel(String bookBarcode) {
         List<BFDBLessonModel> dbLessonModels = queryLessonEntityByBarcode(bookBarcode);
@@ -177,5 +209,6 @@ public class BFDatabaseManager {
         }
         return null;
     }
+
 
 }

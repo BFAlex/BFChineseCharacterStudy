@@ -10,11 +10,12 @@ import org.greenrobot.greendao.annotation.Generated;
 
 @Entity
 public class BFDBBookModel {
-    @Id
+//    @Id
     private Long id;
     private int type;
     private String name;
     /* 如何实现1:N的外联关系 */
+    @Id
     private String barcode;
 
 //    public static BFDBBookModel newInstance(BFBookModel bookModel) {
